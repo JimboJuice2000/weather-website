@@ -23,6 +23,17 @@ async function checkWeather(city) {
     document.querySelector(".temp").innerHTML = data.main.temp.toFixed(1) + "°c";
     document.querySelector(".humidity").innerHTML = data.main.humidity + " %";
     document.querySelector(".wind").innerHTML = data.wind.speed + " km/h";
+    document.querySelector(".country").innerHTML= data.sys.country;
+
+    const sunriseTime = convertTimestampToTime(data.sys.sunrise);
+    document.querySelector("#sunrise").innerHTML=sunriseTime;
+    
+    const sunsetTime = convertTimestampToTime(data.sys.sunset);
+    document.querySelector("#sunset").innerHTML=sunsetTime;
+
+    const pressure = data.main.pressure;
+    document.querySelector("#pressure").innerHTML = pressure + " hPa";
+    
     card.style.backdropFilter="blur(15px)";
 
     if (data.weather[0].main=="Clouds") {
@@ -57,4 +68,17 @@ async function checkWeather(city) {
 searchBtn.addEventListener("click", () =>{
     checkWeather(searchBox.value);
 
-} )
+});
+
+// function convertTimestamp(timestamp) {
+//     const date = new Date(timestamp * 1000); // Convert to milliseconds
+//     return date.toUTCString();
+// }
+
+function convertTimestampToTime(timestamp) {
+    const date = new Date(timestamp * 1000); // Convert to milliseconds
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds} UTC`;
+}
